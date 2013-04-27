@@ -36,25 +36,26 @@ class GithubHookProvider implements ControllerProviderInterface, ServiceProvider
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
+        $provider = $this;
 
-        $controllers->get('/', function (Application $app) {
-            return $this->createResponse('Invalid Grant');
+        $controllers->get('/', function (Application $app) use ($provider) {
+            return $provider->createResponse('Invalid Grant');
         });
 
-        $controllers->post('/', function (Application $app) {
+        $controllers->post('/', function (Application $app) use ($provider) {
             try {
                 $hook = $app['github_hook.factory']->create($app['request']);
 
-                $this->log($app, 'Hook trigger', LogLevel::INFO, array('hook' => $hook->toArray()));
+                $provider->log($app, 'Hook trigger', LogLevel::INFO, array('hook' => $hook->toArray()));
                 $app['dispatcher']->dispatch(Events::HOOK, new HookEvent($hook));
 
-                return $this->createResponse('Ok');
+                return $provider->createResponse('Ok');
             } catch (FirewallException $e) {
-                return $this->failure('Invalid Grant', $e, $app);
+                return $provider->failure('Invalid Grant', $e, $app);
             } catch (HookException $e) {
-                return $this->failure('Invalid Request', $e, $app);
+                return $provider->failure('Invalid Request', $e, $app);
             } catch (\Exception $e) {
-                return $this->failure('Error...', $e, $app);
+                return $provider->failure('Error...', $e, $app);
             }
         });
 
@@ -92,7 +93,7 @@ class GithubHookProvider implements ControllerProviderInterface, ServiceProvider
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse The JSON response.
      */
-    protected function failure($state, \Exception $e, Application $app)
+    public function failure($state, \Exception $e, Application $app)
     {
         $this->log($app, sprintf('%s - %s', $state, $e->getMessage()), LogLevel::ERROR);
 
@@ -107,7 +108,7 @@ class GithubHookProvider implements ControllerProviderInterface, ServiceProvider
      * @param string             $level   The log level.
      * @param array              $context The log context.
      */
-    protected function log(Application $app, $message, $level, array $context = array())
+    public function log(Application $app, $message, $level, array $context = array())
     {
         if ($app->offsetExists('monolog')) {
             $app['monolog']->log($level, sprintf('%s - %s', 'Github Hook', $message), $context);
@@ -121,7 +122,7 @@ class GithubHookProvider implements ControllerProviderInterface, ServiceProvider
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse The JSON response.
      */
-    protected function createResponse($state)
+    public function createResponse($state)
     {
         return new JsonResponse(array('state' => $state));
     }
