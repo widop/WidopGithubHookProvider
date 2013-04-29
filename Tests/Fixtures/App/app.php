@@ -15,9 +15,13 @@ use Silex\Application;
 use Widop\GithubHook\GithubHookProvider;
 
 $githubHookProvider = new GithubHookProvider();
+$githubHookConfiguration = array(
+    'github_hook.trusted_ips'   => array('127.0.0.1'),
+    'github_hook.trusted_cidrs' => array(),
+);
 
 $app = new Application();
-$app->register($githubHookProvider, array('github_hook.trusted_ips' => array('127.0.0.1')));
+$app->register($githubHookProvider, $githubHookConfiguration);
 $app->mount('/', $githubHookProvider);
 $app->run();
 
