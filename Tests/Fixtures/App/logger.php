@@ -17,11 +17,15 @@ use Silex\Provider\MonologServiceProvider;
 use Widop\GithubHook\GithubHookProvider;
 
 $githubHookProvider = new GithubHookProvider();
+$githubHookConfiguration = array(
+    'github_hook.trusted_ips'   => array('127.0.0.1'),
+    'github_hook.trusted_cidrs' => array(),
+);
 
 $app = new Application();
 $app->register(new MonologServiceProvider());
 $app['monolog.handler'] = $app->share(function () { return new TestHandler(); });
-$app->register($githubHookProvider, array('github_hook.trusted_ips' => array('127.0.0.1')));
+$app->register($githubHookProvider, $githubHookConfiguration);
 $app->mount('/', $githubHookProvider);
 $app->run();
 
