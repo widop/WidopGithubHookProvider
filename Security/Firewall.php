@@ -23,14 +23,19 @@ class Firewall
     /** @var array */
     protected $trustedIps;
 
+    /** @var array */
+    protected $trustedCidrs;
+
     /**
      * Creates a Github hook firewall.
      *
-     * @param array $trustedIps The trusted IPs.
+     * @param array $trustedIps   The trusted IPs.
+     * @param array $trustedCidrs The trusted CIDRs.
      */
-    public function __construct(array $trustedIps)
+    public function __construct(array $trustedIps = array(), array $trustedCidrs = array())
     {
         $this->trustedIps = $trustedIps;
+        $this->trustedCidrs = $trustedCidrs;
     }
 
     /**
@@ -44,6 +49,16 @@ class Firewall
     }
 
     /**
+     * Gets the trusted CIDRs.
+     *
+     * @return array The trusted CIDRs.
+     */
+    public function getTrustedCidrs()
+    {
+        return $this->trustedCidrs;
+    }
+
+    /**
      * Checks if the firewall trusts the http request.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request The http request.
@@ -52,6 +67,38 @@ class Firewall
      */
     public function trust(Request $request)
     {
-        return in_array($request->getClientIp(), $this->trustedIps);
+        $clientIp = $request->getClientIp();
+
+        if (in_array($clientIp, $this->getTrustedIps())) {
+            return true;
+        }
+
+        foreach ($this->getTrustedCidrs() as $trustedCidr) {
+            if ($this->matchCidr($clientIp, $trustedCidr)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the IP matcheds the CIDR.
+     *
+     * @param string $ip   The IP.
+     * @param string $cidr The CIDR.
+     *
+     * @return boolean TRUE if the IP matches the CIDR else FALSE.
+     */
+    protected function matchCidr($ip, $cidr)
+    {
+        list ($subnet, $bits) = explode('/', $cidr);
+
+        $ip = ip2long($ip);
+        $subnet = ip2long($subnet);
+        $mask = -1 << (32 - $bits);
+        $subnet &= $mask;
+
+        return ($ip & $mask) == $subnet;
     }
 }

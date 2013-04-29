@@ -31,7 +31,7 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->firewall = new Firewall(array('127.0.0.1'));
+        $this->firewall = new Firewall(array('127.0.0.1'), array('192.168.0.1/20'));
         $this->requestMock = $this->getMock('\Symfony\Component\HttpFoundation\Request');
     }
 
@@ -44,17 +44,13 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
         unset($this->requestMock);
     }
 
-    public function testTrustedIps()
+    public function testDefaultState()
     {
         $this->assertSame(array('127.0.0.1'), $this->firewall->getTrustedIps());
+        $this->assertSame(array('192.168.0.1/20'), $this->firewall->getTrustedCidrs());
     }
 
-    public function testTrustWithValidRequest()
-    {
-        $this->assertFalse($this->firewall->trust($this->requestMock));
-    }
-
-    public function testTrustWithInvalidRequest()
+    public function testTrustWithValidIp()
     {
         $this->requestMock
             ->expects($this->once())
@@ -62,5 +58,30 @@ class FirewallTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('127.0.0.1'));
 
         $this->assertTrue($this->firewall->trust($this->requestMock));
+    }
+
+    public function testTrustWithInvalidIp()
+    {
+        $this->assertFalse($this->firewall->trust($this->requestMock));
+    }
+
+    public function testTrustWithValidCidr()
+    {
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getClientIp')
+            ->will($this->returnValue('192.168.0.1'));
+
+        $this->assertTrue($this->firewall->trust($this->requestMock));
+    }
+
+    public function testTrustWithInvalidCidr()
+    {
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getClientIp')
+            ->will($this->returnValue('192.169.0.1'));
+
+        $this->assertFalse($this->firewall->trust($this->requestMock));
     }
 }
