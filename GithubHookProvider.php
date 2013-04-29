@@ -68,7 +68,7 @@ class GithubHookProvider implements ControllerProviderInterface, ServiceProvider
     public function register(Application $app)
     {
         $app['github_hook.firewall'] = $app->share(function () use ($app) {
-            return new Firewall($app['github_hook.trusted_ips']);
+            return new Firewall($app['github_hook.trusted_ips'], $app['github_hook.trusted_cidrs']);
         });
 
         $app['github_hook.factory'] = $app->share(function () use ($app) {
