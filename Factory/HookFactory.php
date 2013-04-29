@@ -68,7 +68,7 @@ class HookFactory
         try {
             $hook = $this->configProcessor->processConfiguration($this->hookConfiguration, array($payload));
         } catch (InvalidConfigurationException $e) {
-            throw HookException::invalidRequest();
+            throw HookException::invalidRequest($e->getMessage());
         }
 
         return new Hook($hook);
