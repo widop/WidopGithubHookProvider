@@ -21,10 +21,12 @@ class HookException extends Exception
     /**
      * Gets the "INVALID REQUEST" exception.
      *
+     * @param string $error The error message.
+     *
      * @return \Widop\GithubHook\Exception\HookException The "INVALID REQUEST" exception.
      */
-    public static function invalidRequest()
+    public static function invalidRequest($error)
     {
-        return new self('The Github hook request is not valid.');
+        return new self(sprintf('The Github hook request is not valid. (%s)', $error));
     }
 }

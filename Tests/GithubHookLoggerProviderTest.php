@@ -70,7 +70,7 @@ class GithubHookLoggerProviderTest extends WebTestCase
 
         $this->assertSame('> POST /', $records[2]['message']);
         $this->assertSame(
-            'Github Hook - Invalid Request - The Github hook request is not valid.',
+            'Github Hook - Invalid Request - The Github hook request is not valid. (The child node "before" at path "hook" must be configured.)',
             $records[3]['message']
         );
         $this->assertSame(Logger::ERROR, $records[3]['level']);
