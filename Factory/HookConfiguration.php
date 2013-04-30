@@ -39,11 +39,9 @@ class HookConfiguration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('after')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('before')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->booleanNode('created')
                     ->isRequired()
@@ -56,7 +54,6 @@ class HookConfiguration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('compare')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
             ->end();
 
@@ -74,54 +71,50 @@ class HookConfiguration implements ConfigurationInterface
     protected function getCommitNode($name, $prototyped = false)
     {
         $builder = new TreeBuilder();
-        $node = $prototypedNode = $builder->root($name);
+        $node = $builder->root($name);
 
         if ($prototyped) {
-            $prototypedNode = $node
+            $childNode = $node
                 ->isRequired()
                 ->prototype('array');
+        } else {
+            $childNode = $node
+                ->beforeNormalization()
+                ->ifNull()
+                    ->then(function() { return array(); })
+                ->end();
         }
 
-        $prototypedNode
+        $childNode
             ->append($this->getUserNode('author'))
             ->append($this->getUserNode('committer'))
             ->children()
                 ->scalarNode('id')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->booleanNode('distinct')
                     ->isRequired()
                 ->end()
                 ->scalarNode('message')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('timestamp')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('url')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->arrayNode('added')
                     ->isRequired()
-                    ->prototype('scalar')
-                        ->cannotBeEmpty()
-                    ->end()
+                    ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('removed')
                     ->isRequired()
-                    ->prototype('scalar')
-                        ->cannotBeEmpty()
-                    ->end()
+                    ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('modified')
                     ->isRequired()
-                    ->prototype('scalar')
-                        ->cannotBeEmpty()
-                    ->end()
+                    ->prototype('scalar')->end()
                 ->end()
             ->end();
 
@@ -146,14 +139,10 @@ class HookConfiguration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('name')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('url')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
-                ->scalarNode('description')->end()
-                ->scalarNode('homepage')->end()
                 ->integerNode('watchers')
                     ->isRequired()
                 ->end()
@@ -186,7 +175,6 @@ class HookConfiguration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('language')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->integerNode('created_at')
                     ->isRequired()
@@ -196,8 +184,9 @@ class HookConfiguration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('master_branch')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
+                ->scalarNode('description')->end()
+                ->scalarNode('homepage')->end()
                 ->scalarNode('organization')->end()
             ->end();
 
@@ -220,7 +209,6 @@ class HookConfiguration implements ConfigurationInterface
             ->children()
                 ->scalarNode('name')
                     ->isRequired()
-                    ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('email')->end()
                 ->scalarNode('username')->end()
