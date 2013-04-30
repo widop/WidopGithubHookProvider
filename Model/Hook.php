@@ -19,6 +19,9 @@ namespace Widop\GithubHook\Model;
 class Hook
 {
     /** @var string */
+    protected $baseRef;
+
+    /** @var string */
     protected $ref;
 
     /** @var string */
@@ -58,6 +61,7 @@ class Hook
      */
     public function __construct(array $hook)
     {
+        $this->baseRef = $hook['base_ref'];
         $this->ref = $hook['ref'];
         $this->after = $hook['after'];
         $this->before = $hook['before'];

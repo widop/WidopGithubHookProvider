@@ -34,6 +34,7 @@ class HookConfiguration implements ConfigurationInterface
             ->append($this->getRepositoryNode())
             ->append($this->getUserNode('pusher'))
             ->children()
+                ->scalarNode('base_ref')->end()
                 ->scalarNode('ref')
                     ->isRequired()
                 ->end()
