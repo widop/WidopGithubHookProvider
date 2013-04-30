@@ -91,6 +91,8 @@ class HookConfiguration implements ConfigurationInterface
                             'added'     => array(),
                             'removed'   => array(),
                             'modified'  => array(),
+                            'author'    => array(),
+                            'committer' => array(),
                         );
                     })
                 ->end();
