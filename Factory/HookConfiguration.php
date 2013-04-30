@@ -81,7 +81,18 @@ class HookConfiguration implements ConfigurationInterface
             $childNode = $node
                 ->beforeNormalization()
                 ->ifNull()
-                    ->then(function() { return array(); })
+                    ->then(function() {
+                        return array(
+                            'id'        => null,
+                            'distinct'  => null,
+                            'message'   => null,
+                            'timestamp' => null,
+                            'url'       => null,
+                            'added'     => array(),
+                            'removed'   => array(),
+                            'modified'  => array(),
+                        );
+                    })
                 ->end();
         }
 
