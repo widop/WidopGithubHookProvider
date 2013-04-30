@@ -79,7 +79,6 @@ class HookConfiguration implements ConfigurationInterface
         if ($prototyped) {
             $prototypedNode = $node
                 ->isRequired()
-                ->requiresAtLeastOneElement()
                 ->prototype('array');
         }
 
