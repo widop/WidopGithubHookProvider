@@ -220,9 +220,7 @@ class HookConfiguration implements ConfigurationInterface
 
         $node
             ->children()
-                ->scalarNode('name')
-                    ->isRequired()
-                ->end()
+                ->scalarNode('name')->end()
                 ->scalarNode('email')->end()
                 ->scalarNode('username')->end()
             ->end();
