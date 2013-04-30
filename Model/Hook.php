@@ -61,25 +61,67 @@ class Hook
      */
     public function __construct(array $hook)
     {
-        $this->baseRef = $hook['base_ref'];
-        $this->ref = $hook['ref'];
-        $this->after = $hook['after'];
-        $this->before = $hook['before'];
-
-        $this->created = $hook['created'];
-        $this->deleted = $hook['deleted'];
-        $this->forced = $hook['forced'];
-
-        $this->compare = $hook['compare'];
-
-        $this->commits = array();
-        foreach ($hook['commits'] as $commit) {
-            $this->commits[] = new Commit($commit);
+        if (isset($hook['base_ref'])) {
+            $this->baseRef = $hook['base_ref'];
         }
 
-        $this->headCommit = new Commit($hook['head_commit']);
-        $this->repository = new Repository($hook['repository']);
-        $this->pusher = new User($hook['pusher']);
+        if (isset($hook['ref'])) {
+            $this->ref = $hook['ref'];
+        }
+
+        if (isset($hook['after'])) {
+            $this->after = $hook['after'];
+        }
+
+        if (isset($hook['before'])) {
+            $this->before = $hook['before'];
+        }
+
+        if (isset($hook['created'])) {
+            $this->created = $hook['created'];
+        }
+
+        if (isset($hook['deleted'])) {
+            $this->deleted = $hook['deleted'];
+        }
+
+        if (isset($hook['forced'])) {
+            $this->forced = $hook['forced'];
+        }
+
+        if (isset($hook['compare'])) {
+            $this->compare = $hook['compare'];
+        }
+
+        $this->commits = array();
+
+        if (isset($hook['commits'])) {
+            foreach ($hook['commits'] as $commit) {
+                $this->commits[] = new Commit($commit);
+            }
+        }
+
+        if (isset($hook['head_commit'])) {
+            $this->headCommit = new Commit($hook['head_commit']);
+        }
+
+        if (isset($hook['repository'])) {
+            $this->repository = new Repository($hook['repository']);
+        }
+
+        if (isset($hook['pusher'])) {
+            $this->pusher = new User($hook['pusher']);
+        }
+    }
+
+    /**
+     * Gets the base ref.
+     *
+     * @return string The base ref.
+     */
+    public function getBaseRef()
+    {
+        return $this->baseRef;
     }
 
     /**
@@ -200,6 +242,7 @@ class Hook
     public function toArray()
     {
         return array(
+            'base_ref'    => $this->getBaseRef(),
             'ref'         => $this->getRef(),
             'after'       => $this->getAfter(),
             'before'      => $this->getBefore(),

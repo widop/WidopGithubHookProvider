@@ -44,7 +44,7 @@ class HookFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->request = new Request();
         $this->request->server->set('REMOTE_ADDR', '127.0.0.1');
-        $this->payload = require_once __DIR__.'/../Fixtures/payload.php';
+        $this->payload = require __DIR__.'/../Fixtures/payload.php';
         $this->request->request->set('payload', json_encode($this->payload));
     }
 
@@ -98,5 +98,38 @@ class HookFactoryTest extends \PHPUnit_Framework_TestCase
         $this->request->request->set('payload', json_encode($payload));
 
         $this->hookFactory->create($this->request);
+    }
+
+    public function testCreateWithNullCommitHeader()
+    {
+        $payload = $this->payload;
+        $payload['head_commit'] = null;
+
+        $this->request->request->set('payload', json_encode($payload));
+
+        $hook = $this->hookFactory->create($this->request);
+
+        $payload['head_commit'] = Array (
+            'id'        => null,
+            'distinct'  => true,
+            'message'   => null,
+            'timestamp' => null,
+            'url'       => null,
+            'added'     => array(),
+            'removed'   => array(),
+            'modified'  => array(),
+            'author'    => array(
+                'name'     => null,
+                'email'    => null,
+                'username' => null,
+            ),
+            'committer' => array(
+                'name'     => null,
+                'email'    => null,
+                'username' => null,
+            ),
+        );
+
+        $this->assertSame($payload, $hook->toArray());
     }
 }

@@ -34,9 +34,17 @@ class User
      */
     public function __construct(array $user)
     {
-        $this->name = $user['name'];
-        $this->email = $user['email'];
-        $this->username = $user['username'];
+        if (isset($user['name'])) {
+            $this->name = $user['name'];
+        }
+
+        if (isset($user['email'])) {
+            $this->email = $user['email'];
+        }
+
+        if (isset($user['username'])) {
+            $this->username = $user['username'];
+        }
     }
 
     /**

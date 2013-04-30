@@ -55,17 +55,45 @@ class Commit
      */
     public function __construct(array $commit)
     {
-        $this->id = $commit['id'];
-        $this->distinct = $commit['distinct'];
-        $this->message = $commit['message'];
-        $this->timestamp = $commit['timestamp'];
-        $this->url = $commit['url'];
-        $this->added = $commit['added'];
-        $this->removed = $commit['removed'];
-        $this->modified = $commit['modified'];
+        if (isset($commit['id'])) {
+            $this->id = $commit['id'];
+        }
 
-        $this->author = new User($commit['author']);
-        $this->committer = new User($commit['committer']);
+        if (isset($commit['distinct'])) {
+            $this->distinct = $commit['distinct'];
+        }
+
+        if (isset($commit['message'])) {
+            $this->message = $commit['message'];
+        }
+
+        if (isset($commit['timestamp'])) {
+            $this->timestamp = $commit['timestamp'];
+        }
+
+        if (isset($commit['url'])) {
+            $this->url = $commit['url'];
+        }
+
+        if (isset($commit['added'])) {
+            $this->added = $commit['added'];
+        }
+
+        if (isset($commit['removed'])) {
+            $this->removed = $commit['removed'];
+        }
+
+        if (isset($commit['modified'])) {
+            $this->modified = $commit['modified'];
+        }
+
+        if (isset($commit['author'])) {
+            $this->author = new User($commit['author']);
+        }
+
+        if (isset($commit['committer'])) {
+            $this->committer = new User($commit['committer']);
+        }
     }
 
     /**

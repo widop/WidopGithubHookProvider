@@ -10,14 +10,15 @@
  */
 
 return array(
-    'ref'     => 'refs/heads/master',
-    'after'   => 'de8251ff97ee194a289832576287d6f8ad74e3d0',
-    'before'  => '5aef35982fb2d34e9d9d4502f6ede1072793222d',
-    'created' => false,
-    'deleted' => true,
-    'forced'  => true,
-    'compare' => 'https://github.com/widop/WidopCoreBundle/compare/4161826f7ff5...d88f3cdee989',
-    'commits' => array(
+    'base_ref' => 'refs/heads/master',
+    'ref'      => 'refs/heads/master',
+    'after'    => 'de8251ff97ee194a289832576287d6f8ad74e3d0',
+    'before'   => '5aef35982fb2d34e9d9d4502f6ede1072793222d',
+    'created'  => false,
+    'deleted'  => true,
+    'forced'   => true,
+    'compare'  => 'https://github.com/widop/WidopCoreBundle/compare/4161826f7ff5...d88f3cdee989',
+    'commits'  => array(
         0 => array(
             'id'        => '41a212ee83ca127e3c8cf465891ab7216a705f59',
             'distinct'  => true,

@@ -88,28 +88,89 @@ class Repository
      */
     public function __construct(array $repository)
     {
-        $this->id = $repository['id'];
-        $this->name = $repository['name'];
-        $this->url = $repository['url'];
-        $this->description = $repository['description'];
-        $this->homepage = $repository['homepage'];
-        $this->watchers = $repository['watchers'];
-        $this->stargazers = $repository['stargazers'];
-        $this->forks = $repository['forks'];
-        $this->fork = $repository['fork'];
-        $this->size = $repository['size'];
-        $this->private = $repository['private'];
-        $this->openIssues = $repository['open_issues'];
-        $this->hasIssues = $repository['has_issues'];
-        $this->hasDownloads = $repository['has_downloads'];
-        $this->hasWiki = $repository['has_wiki'];
-        $this->language = $repository['language'];
-        $this->createdAt = $repository['created_at'];
-        $this->pushedAt = $repository['pushed_at'];
-        $this->masterBranch = $repository['master_branch'];
-        $this->organization = $repository['organization'];
+        if (isset($repository['id'])) {
+            $this->id = $repository['id'];
+        }
 
-        $this->owner = new User($repository['owner']);
+        if (isset($repository['name'])) {
+            $this->name = $repository['name'];
+        }
+
+        if (isset($repository['url'])) {
+            $this->url = $repository['url'];
+        }
+
+        if (isset($repository['description'])) {
+            $this->description = $repository['description'];
+        }
+
+        if (isset($repository['homepage'])) {
+            $this->homepage = $repository['homepage'];
+        }
+
+        if (isset($repository['watchers'])) {
+            $this->watchers = $repository['watchers'];
+        }
+
+        if (isset($repository['stargazers'])) {
+            $this->stargazers = $repository['stargazers'];
+        }
+
+        if (isset($repository['forks'])) {
+            $this->forks = $repository['forks'];
+        }
+
+        if (isset($repository['fork'])) {
+            $this->fork = $repository['fork'];
+        }
+
+        if (isset($repository['size'])) {
+            $this->size = $repository['size'];
+        }
+
+        if (isset($repository['private'])) {
+            $this->private = $repository['private'];
+        }
+
+        if (isset($repository['open_issues'])) {
+            $this->openIssues = $repository['open_issues'];
+        }
+
+        if (isset($repository['has_issues'])) {
+            $this->hasIssues = $repository['has_issues'];
+        }
+
+        if (isset($repository['has_downloads'])) {
+            $this->hasDownloads = $repository['has_downloads'];
+        }
+
+        if (isset($repository['has_wiki'])) {
+            $this->hasWiki = $repository['has_wiki'];
+        }
+
+        if (isset($repository['language'])) {
+            $this->language = $repository['language'];
+        }
+
+        if (isset($repository['created_at'])) {
+            $this->createdAt = $repository['created_at'];
+        }
+
+        if (isset($repository['pushed_at'])) {
+            $this->pushedAt = $repository['pushed_at'];
+        }
+
+        if (isset($repository['master_branch'])) {
+            $this->masterBranch = $repository['master_branch'];
+        }
+
+        if (isset($repository['organization'])) {
+            $this->organization = $repository['organization'];
+        }
+
+        if (isset($repository['owner'])) {
+            $this->owner = new User($repository['owner']);
+        }
     }
 
     /**
