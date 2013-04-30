@@ -217,7 +217,6 @@ class HookConfiguration implements ConfigurationInterface
         $node = $builder->root($name);
 
         $node
-            ->isRequired()
             ->children()
                 ->scalarNode('name')
                     ->isRequired()
