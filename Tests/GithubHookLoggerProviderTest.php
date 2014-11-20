@@ -44,16 +44,16 @@ class GithubHookLoggerProviderTest extends WebTestCase
 
         $records = $this->app['monolog.handler']->getRecords();
 
-        $this->assertCount(5, $records);
+        $this->assertCount(7, $records);
 
-        $this->assertSame('> POST /', $records[2]['message']);
+        $this->assertSame('> POST /', $records[4]['message']);
         $this->assertSame(
             'Github Hook - Invalid Grant - The HTTP request IP is not allowed. (IP: 192.168.0.1, Trusted IP(s): 127.0.0.1)',
-            $records[3]['message']
+            $records[5]['message']
         );
-        $this->assertSame(Logger::ERROR, $records[3]['level']);
-        $this->assertEmpty($records[3]['context']);
-        $this->assertSame('< 200', $records[4]['message']);
+        $this->assertSame(Logger::ERROR, $records[5]['level']);
+        $this->assertEmpty($records[5]['context']);
+        $this->assertSame('< 200', $records[6]['message']);
     }
 
     public function testPostRequestWithInvalidPayload()
@@ -66,16 +66,16 @@ class GithubHookLoggerProviderTest extends WebTestCase
 
         $records = $this->app['monolog.handler']->getRecords();
 
-        $this->assertCount(5, $records);
+        $this->assertCount(7, $records);
 
-        $this->assertSame('> POST /', $records[2]['message']);
+        $this->assertSame('> POST /', $records[4]['message']);
         $this->assertSame(
             'Github Hook - Invalid Request - The Github hook request is not valid. (The child node "before" at path "hook" must be configured.)',
-            $records[3]['message']
+            $records[5]['message']
         );
-        $this->assertSame(Logger::ERROR, $records[3]['level']);
-        $this->assertEmpty($records[3]['context']);
-        $this->assertSame('< 200', $records[4]['message']);
+        $this->assertSame(Logger::ERROR, $records[5]['level']);
+        $this->assertEmpty($records[5]['context']);
+        $this->assertSame('< 200', $records[6]['message']);
     }
 
     public function testValidPostRequest()
@@ -87,15 +87,15 @@ class GithubHookLoggerProviderTest extends WebTestCase
 
         $records = $this->app['monolog.handler']->getRecords();
 
-        $this->assertCount(5, $records);
+        $this->assertCount(7, $records);
 
-        $this->assertSame('> POST /', $records[2]['message']);
+        $this->assertSame('> POST /', $records[4]['message']);
         $this->assertSame(
             'Github Hook - Hook trigger',
-            $records[3]['message']
+            $records[5]['message']
         );
-        $this->assertSame(Logger::INFO, $records[3]['level']);
-        $this->assertSame(array('hook' => $payload), $records[3]['context']);
-        $this->assertSame('< 200', $records[4]['message']);
+        $this->assertSame(Logger::INFO, $records[5]['level']);
+        $this->assertSame(array('hook' => $payload), $records[5]['context']);
+        $this->assertSame('< 200', $records[6]['message']);
     }
 }
